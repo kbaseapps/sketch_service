@@ -1,0 +1,17 @@
+{
+  "function_places": {"get_homologs": {"end_line": 0, "start_line": 0}},
+  "functions": {
+    "get_homologs": {
+      "comment": "Get all similar genomes for a given genome",
+      "input": [{}],
+      "name": "echo_message",
+      "output": [{}],
+      "place": {"end_line": 0, "start_line": 0}
+    }
+  },
+  "impl_file_path": "",
+  "module_name": "homology_service",
+  "sdk_git_commit": "0",
+  "sdk_version": "0",
+  "spec_files": [{"content": "", "is_main": 1}]
+}
