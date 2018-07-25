@@ -1,6 +1,7 @@
 """The main entrypoint for running the Flask server."""
 import os
 import flask
+import subprocess
 from dotenv import load_dotenv
 
 load_dotenv('.env')
@@ -19,4 +20,5 @@ def log_request():
 @app.route('/', methods=['GET'])
 def root():
     """Root path for the entire service"""
-    return flask.jsonify({'hello': 'world'})
+    out_str = subprocess.check_output(['mash'])
+    return flask.jsonify({'hello': out_str})

@@ -8,14 +8,12 @@ This is a KBase dynamic (persistent) service that takes [Workspace IDs]() pointi
 
 ### Running the server
 
-Run the server with:
+Run the server locally with:
 
 ```sh
 $ docker build . -t kbase_sketch_service
 $ docker run -p 5000:5000 -v $(pwd):/kb/module -it kbase_sketch_service
 ```
-
-TODO will need to make this compatible with kbase.
 
 ### Testing
 

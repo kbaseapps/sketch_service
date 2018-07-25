@@ -1,14 +1,17 @@
 FROM python:3.7-stretch
 
-# TODO install mash in /usr/bin
-# https://github.com/marbl/Mash/releases
+WORKDIR /opt
+
+RUN curl -LJO  https://github.com/marbl/Mash/releases/download/v2.0/mash-Linux64-v2.0.tar \
+    && tar xvf mash-Linux64-v2.0.tar \
+    && rm mash-Linux64-v2.0.tar \
+    && ln -s /opt/mash-Linux64-v2.0/mash /usr/bin/mash
 
 WORKDIR /kb/module
 
 # Install pip dependencies
 COPY ./requirements.txt /kb/module/requirements.txt
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY . /kb/module
 RUN chmod -R a+rw /kb/module
