@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 from .download_file import download_file
 from .generate_sketch import generate_sketch
+from .perform_search import perform_search
 
 load_dotenv('.env')
 
@@ -16,7 +17,7 @@ app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 @app.route('/', methods=['GET'])
 def root():
     """Root path for the entire service"""
-    return "Usage: GET /shock_id.\nFor example: GET /ce9dcf92-019c-41d2-8523-6d36c889a5ca"
+    return "Usage: GET /shock_id. Example: GET /ce9dcf92-019c-41d2-8523-6d36c889a5ca"
 
 
 @app.route('/<shock_id>', methods=['GET'])
@@ -24,6 +25,7 @@ def get_sketch(shock_id):
     """Generate a sketch from a given genome."""
     if not shock_id:
         return ("Enter a Shock ID in the request path", 422)
+    # TODO auth
     download_result = download_file(shock_id, 'xyz')
 
     @flask.after_this_request
@@ -40,8 +42,5 @@ def get_sketch(shock_id):
     # path = result.downloaded_file.tmp_file.name
     # filename = result.downloaded_file.filename
     sketch_result = generate_sketch(downloaded_file)
-    return flask.send_file(
-        sketch_result.path,
-        as_attachment=True,
-        attachment_filename=sketch_result.file_name
-    )
+    search_result = perform_search(sketch_result)
+    return search_result

@@ -14,6 +14,7 @@ COPY ./requirements.txt /kb/module/requirements.txt
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 ENV KBASE_SHOCK_URL="https://ci.kbase.us/services/shock-api"
+ENV KBASE_HOMOLOGY_URL="http://homology.kbase.us"
 COPY . /kb/module
 RUN chmod -R a+rw /kb/module
 RUN chmod +x /kb/module/entrypoint.sh

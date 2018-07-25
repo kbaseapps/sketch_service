@@ -13,8 +13,9 @@ def generate_sketch(downloaded_file):
     """
     output_name = downloaded_file.file_name + '.msh'
     output_path = downloaded_file.file_path + '.msh'
-    args = ['mash', 'sketch', downloaded_file.file_path, '-o', output_path]
+    args = ['mash', 'sketch', downloaded_file.file_path, '-o', output_path, '-k', "31"]
     proc = subprocess.Popen(args)
+    # TODO error cases
     proc.wait()
     sketch_result = SketchResult(path=output_path, file_name=output_name)
     return sketch_result

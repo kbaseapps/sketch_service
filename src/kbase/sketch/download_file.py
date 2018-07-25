@@ -43,6 +43,8 @@ def download_file(shock_id, auth_token):
     # First, we need to make a request to check for the existence of the file and get its name
     metadata = download_file_metadata(shock_id, auth_token)
     node_url = get_node_url(shock_id)
+    if metadata['status'] == 401:
+        return DownloadResult(error='Unauthorized', downloaded_file=None)
     if metadata['status'] == 404:
         return DownloadResult(error='File not found', downloaded_file=None)
     name = metadata['data']['file']['name']

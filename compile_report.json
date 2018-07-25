@@ -4,7 +4,7 @@
     "get_homologs": {
       "comment": "Get all similar genomes for a given genome",
       "input": [{}],
-      "name": "echo_message",
+      "name": "get_homologs",
       "output": [{}],
       "place": {"end_line": 0, "start_line": 0}
     }
