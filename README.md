@@ -4,6 +4,17 @@ This is a KBase dynamic (persistent) service that takes [Workspace IDs]() pointi
 
 ## Development
 
+### Running the server
+
+Run the server with:
+
+```sh
+$ docker build . -t kbase_homology_service
+$ docker run -p 5000:5000 -v /home/j/kbase/homology_service:/kb/module -it kbase_homology_service
+```
+
+TODO will need to make this compatible with kbase.
+
 ### Testing
 
 ### Project anatomy
