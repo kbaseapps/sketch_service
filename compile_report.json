@@ -10,7 +10,7 @@
     }
   },
   "impl_file_path": "",
-  "module_name": "homology_service",
+  "module_name": "sketch_service",
   "sdk_git_commit": "0",
   "sdk_version": "0",
   "spec_files": [{"content": "", "is_main": 1}]

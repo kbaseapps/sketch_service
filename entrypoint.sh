@@ -7,7 +7,7 @@
 # This is run when there are no arguments
 if [ $# -eq 0 ] ; then
   echo "Running in persistent server mode"
-  FLASK_APP=src/kbase/homology/start_server.py flask run --host=0.0.0.0
+  FLASK_APP=src/kbase/sketch/start_server.py flask run --host=0.0.0.0
 
 # Test mode
 elif [ "${1}" = "test" ] ; then
