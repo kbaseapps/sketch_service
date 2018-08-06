@@ -11,7 +11,9 @@ if [ $# -eq 0 ] ; then
 
 # Run tests
 elif [ "${1}" = "test" ] ; then
-  echo "Running tests... nothing to do."
+  echo "Running tests..."
+  python -m unittest discover src/kbase/sketch/test
+  echo "...done running tests."
 
 # One-off jobs
 elif [ "${1}" = "async" ] ; then
