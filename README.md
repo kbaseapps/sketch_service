@@ -11,7 +11,7 @@ This is a KBase dynamic (persistent) service that takes workspace IDs pointing t
 Build and run the server locally with:
 
 ```sh
-$ docker build . -t kbase_sketch_service --no-cache
+$ make build
 $ make serve
 ```
 

@@ -11,9 +11,9 @@ WORKDIR /kb/module
 
 # Install pip dependencies
 COPY ./requirements.txt /kb/module/requirements.txt
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt && \
-    pip install -i https://pypi.anaconda.org/kbase/simple kbase-workspace-utils==0.0.4
+RUN pip install --upgrade pip -r requirements.txt && \
+    pip install --extra-index-url https://pypi.anaconda.org/kbase/simple \
+        kbase-workspace-utils==0.0.5
 
 COPY . /kb/module
 RUN chmod -R a+rw /kb/module
