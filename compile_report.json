@@ -2,9 +2,9 @@
   "function_places": {"get_homologs": {"end_line": 0, "start_line": 0}},
   "functions": {
     "get_homologs": {
-      "comment": "Get all similar genomes for a given genome",
+      "comment": ""
       "input": [{}],
-      "name": "get_homologs",
+      "name": "",
       "output": [{}],
       "place": {"end_line": 0, "start_line": 0}
     }
