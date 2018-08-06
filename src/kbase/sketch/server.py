@@ -1,13 +1,15 @@
+import tempfile
 import os
 import shutil
 import flask
 from dotenv import load_dotenv
 
-from .download_file import download_file
+from .autodownload import autodownload, UnrecognizedWSType
+from kbase_workspace_utils.exceptions import InvalidUser, InaccessibleWSObject, InvalidGenome
 from .generate_sketch import generate_sketch
 from .perform_search import perform_search
 
-load_dotenv('.env')
+load_dotenv()
 
 app = flask.Flask(__name__)
 app.config['DEBUG'] = os.environ.get('FLASK_DEBUG', True)
@@ -17,30 +19,37 @@ app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 @app.route('/', methods=['GET'])
 def root():
     """Root path for the entire service"""
-    return "Usage: GET /shock_id. Example: GET /ce9dcf92-019c-41d2-8523-6d36c889a5ca"
+    return "Usage: GET /search/workspace_id. Example: GET /search/1/2/3"
 
 
-@app.route('/<shock_id>', methods=['GET'])
-def get_sketch(shock_id):
+@app.route('/search/<ws_id>/<obj_id>/<obj_ver>', methods=['GET'])
+def get_sketch(ws_id, obj_id, obj_ver):
     """Generate a sketch from a given genome."""
-    if not shock_id:
-        return ("Enter a Shock ID in the request path", 422)
-    # TODO auth
-    download_result = download_file(shock_id, 'xyz')
-
-    @flask.after_this_request
-    def cleanup(response):
-        # Remove temporary file when the request is completed.
-        if download_result.downloaded_file:
-            shutil.rmtree(download_result.downloaded_file.dir_path)
-        return response
-
-    if download_result.error:
-        json = {'status': 'error', 'error': download_result.error}
-        return (flask.jsonify(json), 400)
-    downloaded_file = download_result.downloaded_file
-    # path = result.downloaded_file.tmp_file.name
-    # filename = result.downloaded_file.filename
-    sketch_result = generate_sketch(downloaded_file)
+    ws_ref = '/'.join([ws_id, obj_id, obj_ver])
+    # For each sketch, we make and remove a temporary directory
+    tmp_dir = tempfile.mkdtemp()
+    (path, paired_end) = autodownload(ref=ws_ref, save_dir=tmp_dir)
+    sketch_result = generate_sketch(path, paired_end)
     search_result = perform_search(sketch_result)
+    shutil.rmtree(tmp_dir)
     return search_result
+
+
+@app.errorhandler(InvalidUser)
+@app.errorhandler(UnrecognizedWSType)
+@app.errorhandler(InvalidGenome)
+@app.errorhandler(InaccessibleWSObject)
+def invalid_user(err):
+    """Generic exception catcher, returning 400."""
+    return (flask.jsonify({'status': 'error', 'message': str(err)}), 400)
+
+
+@app.errorhandler(404)
+def page_not_found(err):
+    return (flask.jsonify({'status': 'error', 'message': 'Page not found'}), 404)
+
+
+@app.errorhandler(Exception)
+def any_exception(err):
+    """A catch-all for any exceptions we didn't handle above."""
+    return (flask.jsonify({'status': 'error', 'message': 'An unknown error occurred'}), 500)
