@@ -33,11 +33,11 @@ def autodownload(ref, save_dir):
         paths = ws.download_reads(ref=ref, save_dir=save_dir)
         output_path = paths[0]
         return (output_path, False)
+    elif valid_types['assembly'] in ws_type or valid_types['assembly_legacy'] in ws_type:
+        path = ws.download_assembly(ref, save_dir)
+        return (path, False)
     elif valid_types['genome'] in ws_type:
         assembly_ref = ws.get_assembly_from_genome(ref)
-        path = ws.download_assembly(assembly_ref, save_dir)
-        return (path, False)
-    elif valid_types['assembly'] in ws_type or valid_types['assembly_legacy'] in ws_type:
         path = ws.download_assembly(assembly_ref, save_dir)
         return (path, False)
     else:

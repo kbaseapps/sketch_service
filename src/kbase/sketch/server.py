@@ -2,6 +2,7 @@ import tempfile
 import os
 import shutil
 import flask
+import traceback
 from dotenv import load_dotenv
 
 from .autodownload import autodownload, UnrecognizedWSType
@@ -52,4 +53,6 @@ def page_not_found(err):
 @app.errorhandler(Exception)
 def any_exception(err):
     """A catch-all for any exceptions we didn't handle above."""
+    print(str(Exception))
+    traceback.print_exc()
     return (flask.jsonify({'status': 'error', 'message': 'An unknown error occurred'}), 500)
