@@ -3,6 +3,7 @@ import os
 import shutil
 import flask
 import traceback
+from uuid import uuid4
 from dotenv import load_dotenv
 
 from kbase_workspace_utils.exceptions import InvalidUser, InaccessibleWSObject, InvalidGenome
@@ -19,7 +20,7 @@ print('=' * 100)
 os.environ['KBASE_ENV'] = os.environ.get('KBASE_ENV', 'appdev')
 app = flask.Flask(__name__)
 app.config['DEBUG'] = os.environ.get('FLASK_DEBUG', True)
-app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
+app.config['SECRET_KEY'] = os.environ('SECRET_KEY', str(uuid4()))
 
 
 @app.route('/', methods=['POST'])
