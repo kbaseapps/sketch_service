@@ -1,3 +1,4 @@
+from .exceptions import UnrecognizedWSType
 import kbase_workspace_utils as ws
 
 
@@ -11,7 +12,7 @@ valid_types = {
 }
 
 
-def autodownload(ref, save_dir):
+def autodownload(ref, save_dir, auth_token):
     """
     Autodownload the fasta/fastq file for a Genome, Reads, or Assembly.
     Args:
@@ -22,43 +23,35 @@ def autodownload(ref, save_dir):
       paired_end is a boolean indicating if these are paired-end reads
     The generate_sketch function needs to know if it's working with paired-end reads or not
     """
-    ws_obj = ws.download_obj(ref=ref)
+    ws_obj = ws.download_obj(ref=ref, auth_token=auth_token)
     ws_type = ws_obj['data'][0]['info'][2]
     if valid_types['reads_paired'] in ws_type:
-        paths = ws.download_reads(ref=ref, save_dir=save_dir)
+        paths = ws.download_reads(ref, save_dir, auth_token)
         output_path = paths[0].replace(".paired.fwd.fastq", ".fastq")
         concatenate_files(paths, output_path)
         return (output_path, True)
     elif valid_types['reads_single'] in ws_type:
-        paths = ws.download_reads(ref=ref, save_dir=save_dir)
+        paths = ws.download_reads(ref, save_dir, auth_token)
         output_path = paths[0]
         return (output_path, False)
     elif valid_types['assembly'] in ws_type or valid_types['assembly_legacy'] in ws_type:
-        path = ws.download_assembly(ref, save_dir)
+        path = ws.download_assembly(ref, save_dir, auth_token)
         return (path, False)
     elif valid_types['genome'] in ws_type:
-        assembly_ref = ws.get_assembly_from_genome(ref)
-        path = ws.download_assembly(assembly_ref, save_dir)
+        ref = ws.get_assembly_from_genome(ref)
+        path = ws.download_assembly(ref, save_dir, auth_token)
         return (path, False)
     else:
-        raise UnrecognizedWSType(ws_type)
+        raise UnrecognizedWSType(ws_type, valid_types)
 
 
 def concatenate_files(input_paths, output_path):
-    """Cat all the contents of the input paths into the output path."""
+    """
+    Concatenate all the contents of the input paths into the output path. This is used for
+    non-interleaved paired end reads. Mash will take these as one concatenated file.
+    """
     with open(output_path, 'wb') as wfile:
         for path in input_paths:
             with open(path, 'rb') as fread:
                 for line in fread:
                     wfile.write(line)
-
-
-class UnrecognizedWSType(Exception):
-    """An attempt to use the service on a type that we cannot handle."""
-
-    def __init__(self, typ):
-            self.typ = typ
-
-    def __str__(self):
-        return ("Unable to handle type: " + self.typ +
-                ". Valid types are: " + str(valid_types.values()))

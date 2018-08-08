@@ -3,9 +3,14 @@ Simple integration tests on the API itself.
 
 We make actual ajax requests to the running docker container.
 """
+import os
 import json
 import unittest
 import requests
+from dotenv import load_dotenv
+
+load_dotenv('.env')
+
 
 # The URL of the running server from within the docker container
 url = 'http://0.0.0.0:5000'
@@ -14,8 +19,14 @@ url = 'http://0.0.0.0:5000'
 def make_request(ws_ref):
     """Helper to make a JSON RPC request with the given workspace ref."""
     post_data = {'params': [ws_ref], 'method': 'get_homologs', 'id': 0}
-    resp = requests.post(url, data=json.dumps(post_data),
-                         headers={'Content-Type': 'application/json'})
+    resp = requests.post(
+        url,
+        data=json.dumps(post_data),
+        headers={
+            'Content-Type': 'application/json',
+            'Authorization': os.environ['KB_AUTH_TOKEN']
+        }
+    )
     return resp.json()
 
 
