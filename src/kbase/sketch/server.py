@@ -23,7 +23,7 @@ app.config['DEBUG'] = os.environ.get('FLASK_DEBUG', True)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', str(uuid4()))
 
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['POST', 'GET'])
 def root():
     """
     JSON RPC v1.1 method call.
