@@ -1,8 +1,5 @@
 import os
 import subprocess
-from collections import namedtuple
-
-SketchResult = namedtuple('SketchResult', ['path', 'file_name'])
 
 
 def generate_sketch(file_path, paired_end=False):
@@ -10,7 +7,7 @@ def generate_sketch(file_path, paired_end=False):
     Generate a sketch file from a given downloaded fasta/fastq file.
     Args:
       downloaded_file is a DownloadedFile namedtuple defined in ./download_file.py
-    Returns a SketchResult namedtuple (see the definition above)
+    Returns the full path of the sketch file
     """
     output_name = os.path.basename(file_path + '.msh')
     output_path = os.path.join(os.path.dirname(file_path), output_name)
@@ -24,5 +21,4 @@ def generate_sketch(file_path, paired_end=False):
     proc = subprocess.Popen(args)
     # TODO error cases
     proc.wait()
-    sketch_result = SketchResult(path=output_path, file_name=output_name)
-    return sketch_result
+    return output_path
