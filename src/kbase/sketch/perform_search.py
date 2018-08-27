@@ -14,4 +14,7 @@ def perform_search(sketch_path, db_name):
     with open(sketch_path, 'rb') as fd:
         response = requests.post(homology_url + path, data=fd)
     print('search done in', time.time() - start_time)
-    return response.text
+    if response.status_code == 200:
+        return response.text
+    else:
+        raise Exception('Error performing search: ' + response.text)

@@ -2,7 +2,7 @@ import json
 import requests
 import os
 
-_caching_server_url = os.environ.get('KBASE_CACHING_SERVER_URL', 'https://ci.kbase.us/services/cache/v1')
+_caching_server_url = os.environ.get('KBASE_CACHING_SERVER_URL', os.environ['KBASE_ENDPOINT'] + 'cache/v1')
 _service_token = os.environ['KB_SERVICE_TOKEN']
 _headers = {'Content-Type': 'application/json', 'Authorization': _service_token}
 
@@ -10,6 +10,7 @@ _headers = {'Content-Type': 'application/json', 'Authorization': _service_token}
 def upload_to_cache(cache_id, string):
     """Save string content to a cache."""
     print('uploading string to cache', cache_id)
+    print('string is', string)
     endpoint = _caching_server_url + '/cache/' + cache_id
     bytestring = str.encode(string)
     resp = requests.post(

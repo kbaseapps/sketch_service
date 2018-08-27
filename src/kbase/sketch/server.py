@@ -22,7 +22,7 @@ app.config['DEBUG'] = os.environ.get('FLASK_DEBUG', True)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', str(uuid4()))
 
 # AssemblyHomology database/namespace name to use
-db_name = 'NCBI_Refseq'
+db_name = os.environ.get('HOMOLOGY_NAMESPACE', 'NCBI_Refseq')
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -37,9 +37,9 @@ def root():
     print('performing search..')
     if not json_data:
         raise InvalidRequestParams('Pass in a JSON body with RPC parameters.')
-    if not flask.request.headers.get('Authorization'):
-        raise InvalidRequestParams('The Authorization header must contain a KBase auth token.')
-    auth_token = flask.request.headers['Authorization']
+    # if not flask.request.headers.get('Authorization'):
+        # raise InvalidRequestParams('The Authorization header must contain a KBase auth token.')
+    auth_token = flask.request.headers.get('Authorization')
     if not json_data.get('params'):
         raise InvalidRequestParams('.params must be a list of one workspace reference.')
     ws_ref = json_data['params'][0]
@@ -53,7 +53,8 @@ def root():
         (data_path, paired_end) = autodownload(ws_ref, tmp_dir, auth_token)
         sketch_path = generate_sketch(data_path, paired_end)
         search_result = perform_search(sketch_path, db_name)
-        upload_to_cache(cache_id, search_result)
+        if search_result:
+            upload_to_cache(cache_id, search_result)
     shutil.rmtree(tmp_dir)  # Clean up all temp files
     print('total request time:', time.time() - start_time)
     return '{"version": "1.1", "result": ' + search_result + '}'

@@ -18,7 +18,13 @@ def generate_sketch(file_path, paired_end=False):
         # See docs:
         # http://mash.readthedocs.io/en/latest/tutorials.html#querying-read-sets-against-an-existing-refseq-sketch
         args += ['-m', '2']
-    proc = subprocess.Popen(args)
-    # TODO error cases
-    proc.wait()
+    proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    (stdout, stderr) = proc.communicate()
+    print('-' * 80)
+    print('Sketch generation output:')
+    print(stdout)
+    print(stderr)
+    print('-' * 80)
+    if proc.returncode != 0:
+        raise Exception("Error generating sketch data.")
     return output_path
