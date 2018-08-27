@@ -53,7 +53,8 @@ def root():
         (data_path, paired_end) = autodownload(ws_ref, tmp_dir, auth_token)
         sketch_path = generate_sketch(data_path, paired_end)
         search_result = perform_search(sketch_path, db_name)
-        upload_to_cache(cache_id, search_result)
+        if search_result:
+            upload_to_cache(cache_id, search_result)
     shutil.rmtree(tmp_dir)  # Clean up all temp files
     print('total request time:', time.time() - start_time)
     return '{"version": "1.1", "result": ' + search_result + '}'
