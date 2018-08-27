@@ -6,7 +6,7 @@ caching_server_url = "https://ci.kbase.us/cache/v1"
 
 
 def check_cache_for_sketch(ws_ref, save_dir):
-    auth_token = os.environ['KB_AUTH_TOKEN']
+    auth_token = os.environ['KB_SERVICE_TOKEN']
     # Generate the cache_id
     cache_params = {'function': 'generate_sketch', 'ws_ref': ws_ref}
     headers = {'Authorization': auth_token, 'Content-Type': 'application/json'}
