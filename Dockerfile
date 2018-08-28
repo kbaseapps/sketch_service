@@ -16,6 +16,7 @@ RUN pip install --upgrade pip -r requirements.txt && \
         kbase-workspace-utils==0.0.10
 
 COPY . /kb/module
+COPY .env.example .env
 RUN chmod -R a+rw /kb/module
 RUN chmod +x /kb/module/entrypoint.sh
 EXPOSE 5000
