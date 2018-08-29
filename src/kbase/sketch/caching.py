@@ -3,7 +3,7 @@ import requests
 import os
 
 _caching_server_url = os.environ.get('KBASE_CACHING_SERVER_URL', os.environ['KBASE_ENDPOINT'] + 'cache/v1')
-_service_token = os.environ['KB_SERVICE_TOKEN']
+_service_token = os.environ['KBASE_SECURE_CONFIG_PARAM_service_token']
 _headers = {'Content-Type': 'application/json', 'Authorization': _service_token}
 
 

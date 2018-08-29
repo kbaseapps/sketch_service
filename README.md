@@ -11,8 +11,7 @@ This is a KBase dynamic (persistent) service that takes workspace IDs pointing t
 Build and run the server locally with:
 
 ```sh
-$ make build
-$ make serve
+$ make build && make serve
 ```
 
 The app's directory will be volume mounted in the container, so you don't have to restart the server to see changes.

@@ -14,8 +14,8 @@ load_dotenv('.env')
 
 # The URL of the running server from within the docker container
 url = 'http://0.0.0.0:5000'
-service_token = os.environ['KB_SERVICE_TOKEN']
-os.environ['KB_SERVICE_TOKEN'] = ''
+service_token = os.environ['KBASE_SECURE_CONFIG_PARAM_service_token']
+os.environ['KBASE_SECURE_CONFIG_PARAM_service_token'] = ''
 
 
 def make_request(ws_ref):
