@@ -1,3 +1,4 @@
+import json
 import time
 import tempfile
 import os
@@ -47,17 +48,18 @@ def root():
     # Create unique identifying data for the cache
     cache_data = {'ws_ref': ws_ref, 'db_name': db_name, 'fn': 'get_homologs'}
     cache_id = get_cache_id(cache_data)
-    search_result = download_cache_string(cache_id)
-    if not search_result:
+    search_result_json = download_cache_string(cache_id)
+    if not search_result_json:
         # If it is not cached, then we generate the sketch, perform the search, and cache it
         (data_path, paired_end) = autodownload(ws_ref, tmp_dir, auth_token)
         sketch_path = generate_sketch(data_path, paired_end)
         search_result = perform_search(sketch_path, db_name)
-        if search_result:
-            upload_to_cache(cache_id, search_result)
+        search_result_json = json.dumps(search_result)
+        if search_result_json:
+            upload_to_cache(cache_id, search_result_json)
     shutil.rmtree(tmp_dir)  # Clean up all temp files
     print('total request time:', time.time() - start_time)
-    return '{"version": "1.1", "result": ' + search_result + '}'
+    return '{"version": "1.1", "result": ' + search_result_json + '}'
 
 
 @app.errorhandler(InvalidUser)

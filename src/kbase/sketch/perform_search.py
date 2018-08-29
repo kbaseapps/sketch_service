@@ -2,6 +2,8 @@ import time
 import os
 import requests
 
+from .map_refseq_ids import map_refseq_ids_to_kbase
+
 
 def perform_search(sketch_path, db_name):
     """
@@ -15,6 +17,9 @@ def perform_search(sketch_path, db_name):
         response = requests.post(homology_url + path, data=fd)
     print('search done in', time.time() - start_time)
     if response.status_code == 200:
-        return response.text
+        resp_json = response.json()
+        # Convert Refseq IDs into KBase IDs
+        resp_json['distances'] = map_refseq_ids_to_kbase(resp_json['distances'])
+        return resp_json
     else:
         raise Exception('Error performing search: ' + response.text)
