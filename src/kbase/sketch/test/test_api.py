@@ -58,6 +58,19 @@ class TestApi(unittest.TestCase):
         result = json_resp['result']
         self.assertTrue(len(result['distances']))
 
+    def test_search_genome_no_auth(self):
+        """Test a search on a Genome type."""
+        genome_ref = '15792/227059/1'
+        post_data = {'params': [genome_ref], 'method': 'get_homologs', 'id': 0}
+        headers = {'Content-Type': 'application/json'}
+        resp = requests.post(url, data=json.dumps(post_data), headers=headers)
+        json_resp = resp.json()
+        print('-' * 80)
+        print(json_resp)
+        print('-' * 80)
+        result = json_resp['result']
+        self.assertTrue(len(result['distances']))
+
     def test_search_assembly(self):
         """Test a search on an Assembly type."""
         assembly_ref = '34819/10/1'
