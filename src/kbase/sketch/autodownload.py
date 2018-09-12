@@ -39,7 +39,7 @@ def autodownload(ref, save_dir, auth_token):
         path = ws.download_assembly(ref, save_dir, auth_token)
         return (path, False)
     elif valid_types['genome'] in ws_type:
-        ref = ws.get_assembly_from_genome(ref)
+        ref = ws.get_assembly_from_genome(ref, auth_token)
         path = ws.download_assembly(ref, save_dir, auth_token)
         return (path, False)
     else:
