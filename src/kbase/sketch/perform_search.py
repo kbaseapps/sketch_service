@@ -11,7 +11,7 @@ def perform_search(sketch_path, db_name):
     """
     print('starting search request...')
     start_time = time.time()
-    homology_url = os.environ.get('KBASE_HOMOLOGY_URL', 'http://homology.kbase.us')
+    homology_url = os.environ.get('KBASE_HOMOLOGY_URL', 'https://homology.kbase.us')
     path = '/namespace/' + db_name + '/search'
     with open(sketch_path, 'rb') as fd:
         response = requests.post(homology_url + path, data=fd)
