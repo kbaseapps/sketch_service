@@ -7,12 +7,12 @@
 # This is run when there are no arguments
 if [ $# -eq 0 ] ; then
   echo "Running in persistent server mode"
-  FLASK_APP=src/kbase/sketch/server.py flask run --host=0.0.0.0
+  FLASK_APP=src/sketch_service/server.py flask run --host=0.0.0.0
 
 # Run tests
 elif [ "${1}" = "test" ] ; then
   echo "Running tests..."
-  python -m unittest discover src/kbase/sketch/test
+  python -m unittest discover src/sketch_service/test
   echo "...done running tests."
 
 # One-off jobs
