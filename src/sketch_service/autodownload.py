@@ -1,4 +1,3 @@
-import os
 from .exceptions import UnrecognizedWSType
 import kbase_workspace_utils as ws
 

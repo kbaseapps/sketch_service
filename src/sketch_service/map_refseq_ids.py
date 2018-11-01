@@ -1,15 +1,7 @@
-import os
 import json
 import requests
-import urllib.parse
 
-_kbase_endpoint = os.environ.get('KBASE_ENDPOINT', 'https://ci.kbase.us/services/')
-_id_mapper_url = os.environ.get(
-    'ID_MAPPER_URL',
-    urllib.parse.urljoin(_kbase_endpoint + '/', 'idmapper/api/v1')
-)
-
-print('id_mapper_url', _id_mapper_url)
+from .config import id_mapper_url
 
 
 def map_refseq_ids_to_kbase(distances):
@@ -24,7 +16,7 @@ def map_refseq_ids_to_kbase(distances):
     refseq_ids = [d['sourceid'] for d in distances]
     req_data = {"ids": refseq_ids}
     req_json = json.dumps(req_data)
-    endpoint = _id_mapper_url + '/mapping/RefSeq'
+    endpoint = id_mapper_url + '/mapping/RefSeq'
     print('Getting KBase IDs for', refseq_ids)
     print('  endpoint', endpoint)
     resp = requests.get(endpoint, data=req_json)

@@ -6,6 +6,17 @@ This is a KBase dynamic (persistent) service that takes workspace IDs pointing t
 
 ## Development
 
+### Set up the environment
+
+You can use the following env vars:
+
+- `KBASE_ENDPOINT` - required - eg "https://ci.kbase.us/services/"
+- `KBASE_SECURE_CONFIG_PARAM_service_token` - required - a KBase auth token that represents this service, used for making requests to the caching service
+- `KBASE_SECURE_CONFIG_PARAM_CACHING_SERVICE_URL` - optional
+- `KBASE_SECURE_CONFIG_PARAM_HOMOLOGY_URL` - optional - defaults to `https://homology.kbase.us`
+- `KBASE_SECURE_CONFIG_PARAM_ID_MAPPER_URL` - optional - defaults to use `KBASE_ENDPOINT` with `/idmapper/api/v1`
+- `KBASE_SECURE_CONFIG_PARAM_HOMOLOGY_NAMESPACE ` - optional - defaults to `NCBI_Refseq`
+
 ### Running the server
 
 Build and run the server locally with:
