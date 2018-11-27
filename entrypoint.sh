@@ -11,13 +11,16 @@ n_workers="$(($(nproc) * 2 + 1))"
 # This is run when there are no arguments
 if [ $# -eq 0 ] ; then
   echo "Running in persistent server mode"
-  FLASK_APP=src/sketch_service/server.py flask run --host=0.0.0.0
-  gunicorn --worker-class gevent --timeout 1800 --workers $n_workers -b :5000 --reload src.sketch_service.server:app
+  gunicorn --worker-class gevent --timeout 1800 --workers $n_workers -b :5000 --reload src.server:app
 
 # Run tests
 elif [ "${1}" = "test" ] ; then
   echo "Running tests..."
-  python -m unittest discover src/sketch_service/test
+  flake8 --max-complexity 5 src
+  mypy --ignore-missing-imports src
+  python -m pyflakes src
+  bandit -r src
+  python -m unittest discover src/test
   echo "...done running tests."
 
 # One-off jobs

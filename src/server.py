@@ -6,7 +6,6 @@ import shutil
 import flask
 import traceback
 from uuid import uuid4
-from dotenv import load_dotenv
 
 from kbase_workspace_utils.exceptions import InvalidUser, InaccessibleWSObject, InvalidGenome
 from .autodownload import autodownload
@@ -14,8 +13,6 @@ from .caching import upload_to_cache, get_cache_id, download_cache_string
 from .exceptions import InvalidRequestParams, UnrecognizedWSType
 from .generate_sketch import generate_sketch
 from .perform_search import perform_search
-
-load_dotenv()
 
 os.environ['KBASE_ENV'] = os.environ.get('KBASE_ENV', 'appdev')
 app = flask.Flask(__name__)
