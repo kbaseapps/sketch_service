@@ -14,12 +14,3 @@ id_mapper_url = os.environ.get(
     'KBASE_SECURE_CONFIG_PARAM_ID_MAPPER_URL',
     urllib.parse.urljoin(kbase_endpoint + '/', 'idmapper/api/v1')
 )
-
-
-print('Config data:')
-print('-' * 80)
-print('kbase_endpoint', kbase_endpoint)
-print('len(service_token)', len(service_token))
-print('caching_service_url', caching_service_url)
-print('id_mapper_url', id_mapper_url)
-print('-' * 80)
