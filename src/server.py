@@ -95,3 +95,15 @@ def any_exception(err):
         'result': None
     }
     return (flask.jsonify(resp), 500)
+
+
+@app.after_request
+def after_request(resp):
+    # Enable CORS
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    env_allowed_headers = os.environ.get('HTTP_ACCESS_CONTROL_REQUEST_HEADERS', 'authorization')
+    resp.headers['Access-Control-Allow-Headers'] = env_allowed_headers
+    # Set JSON content type and response length
+    resp.headers['Content-Type'] = 'application/json'
+    resp.headers['Content-Length'] = len(resp.content)
+    return resp
