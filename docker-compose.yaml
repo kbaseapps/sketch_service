@@ -10,7 +10,7 @@ services:
       context: .
       args:
         DEVELOPMENT: 1
-    env_file: [.env]
+    env_file: .env
     environment:
       - PYTHONUNBUFFERED=true
       - FLASK_ENV=development

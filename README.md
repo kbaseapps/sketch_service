@@ -17,25 +17,15 @@ You can use the following env vars:
 - `KBASE_SECURE_CONFIG_PARAM_ID_MAPPER_URL` - optional - defaults to use `KBASE_ENDPOINT` with `/idmapper/api/v1`
 - `KBASE_SECURE_CONFIG_PARAM_HOMOLOGY_NAMESPACE ` - optional - defaults to `NCBI_Refseq`
 
-### Running the server
+### Running and testing
 
-Build and run the server locally with:
-
-```sh
-$ make build && make serve
-```
-
-The app's directory will be volume mounted in the container, so you don't have to restart the server to see changes.
-
-### Testing
-
-With the docker server running on `localhost:5000`, run:
+Build and run locally with:
 
 ```sh
-$ make test
+$ docker-compose up --build
 ```
 
-There are some simple service integration tests located in `src/kbase/sketch/test/test_api.py`.
+Run tests with `python -m unittest discover src/test`
 
 ### Project anatomy
 
@@ -44,4 +34,4 @@ Important files:
 * `kbase.yml` and `compile_report.json` are the main configuration required by KBase
 * `entrypoint.sh` is the docker container's entrypoint script. The option with no arguments runs the python server.
 * `Dockerfile` defines our container and `requirements.txt` defines our pip dependencies.
-* The actual server code lives in `src/kbase/sketch`
+* The actual server code lives in `src/server.py`
