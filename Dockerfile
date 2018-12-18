@@ -1,28 +1,27 @@
-FROM python:3.7-alpine
+FROM python:3.7-slim-stretch
 
 ARG DEVELOPMENT
 
 # Install the mash binary
 WORKDIR /opt
-RUN apk --update add --virtual build-dependencies curl tar && \
+RUN apt-get update && apt-get install -y curl && \
     curl -LJO  https://github.com/marbl/Mash/releases/download/v2.0/mash-Linux64-v2.0.tar && \
     tar xvf mash-Linux64-v2.0.tar && \
     rm mash-Linux64-v2.0.tar && \
     ln -s /opt/mash-Linux64-v2.0/mash /usr/bin/mash && \
-    apk del build-dependencies
+    apt-get remove -y curl && apt-get autoremove -y && \
+    /usr/bin/mash
 
 # Install dependencies
 WORKDIR /kb/module
 COPY requirements.txt /kb/module/requirements.txt
 COPY dev-requirements.txt /kb/module/dev-requirements.txt
 WORKDIR /kb/module
-RUN apk --update add --virtual build-dependencies python-dev build-base && \
-    pip install --upgrade pip && \
+RUN pip install --upgrade pip && \
     pip install --upgrade --no-cache-dir -r requirements.txt && \
     pip install --extra-index-url https://pypi.anaconda.org/kbase/simple \
       kbase-workspace-utils==0.0.11 && \
-    if [ "$DEVELOPMENT" ]; then pip install -r dev-requirements.txt; fi && \
-    apk del build-dependencies
+    if [ "$DEVELOPMENT" ]; then pip install -r dev-requirements.txt; fi
 
 # Run the server
 COPY . /kb/module
