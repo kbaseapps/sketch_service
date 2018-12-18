@@ -1,7 +1,7 @@
 import json
 import requests
 
-from .config import caching_service_url, service_token
+from config import caching_service_url, service_token
 
 
 def upload_to_cache(cache_id, string):

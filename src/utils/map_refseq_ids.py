@@ -1,7 +1,7 @@
 import json
 import requests
 
-from .config import id_mapper_url
+from config import id_mapper_url
 
 
 def map_refseq_ids_to_kbase(distances):

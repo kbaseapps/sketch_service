@@ -1,5 +1,5 @@
-from .exceptions import UnrecognizedWSType
 import kbase_workspace_utils as ws
+from exceptions import UnrecognizedWSType
 
 
 # String patterns for every downloadable workspace type that this service can support

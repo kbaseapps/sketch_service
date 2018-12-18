@@ -19,8 +19,6 @@ WORKDIR /kb/module
 RUN apk --update add --virtual build-dependencies python-dev build-base && \
     pip install --upgrade pip && \
     pip install --upgrade --no-cache-dir -r requirements.txt && \
-    pip install --extra-index-url https://pypi.anaconda.org/kbase/simple \
-      kbase-workspace-utils==0.0.11 && \
     if [ "$DEVELOPMENT" ]; then pip install -r dev-requirements.txt; fi && \
     apk del build-dependencies
 
@@ -29,4 +27,4 @@ COPY . /kb/module
 COPY .env.example /kb/module/.env
 RUN chmod -R a+rw /kb/module
 EXPOSE 5000
-ENTRYPOINT ["sh", "/kb/module/entrypoint.sh"]
+ENTRYPOINT ["sh", "/usr/local/bin/entrypoint.sh"]

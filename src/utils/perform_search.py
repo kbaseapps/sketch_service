@@ -2,7 +2,7 @@ import time
 import os
 import requests
 
-from .map_refseq_ids import map_refseq_ids_to_kbase
+from utils.map_refseq_ids import map_refseq_ids_to_kbase
 
 
 def perform_search(sketch_path, db_name):
