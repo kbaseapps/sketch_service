@@ -46,7 +46,7 @@ def root():
     cache_data = {'ws_ref': ws_ref, 'db_name': db_name, 'fn': 'get_homologs'}
     cache_id = get_cache_id(cache_data)
     search_result_json = download_cache_string(cache_id)
-    if not search_result_json:
+    if not search_result_json or not search_result_json.strip():
         # If it is not cached, then we generate the sketch, perform the search, and cache it
         (data_path, paired_end) = autodownload(ws_ref, tmp_dir, auth_token)
         sketch_path = generate_sketch(data_path, paired_end)
