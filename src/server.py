@@ -31,7 +31,7 @@ def root():
     We ignore the "method" parameter here as this service has only one function.
     """
     start_time = time.time()
-    json_data = flask.request.get_json()
+    json_data = json.loads(flask.request.get_data())
     print('performing search..')
     if not json_data:
         raise InvalidRequestParams('Pass in a JSON body with RPC parameters.')
@@ -101,7 +101,7 @@ def any_exception(err):
 def after_request(resp):
     # Enable CORS
     resp.headers['Access-Control-Allow-Origin'] = '*'
-    env_allowed_headers = os.environ.get('HTTP_ACCESS_CONTROL_REQUEST_HEADERS', 'authorization')
+    env_allowed_headers = os.environ.get('HTTP_ACCESS_CONTROL_REQUEST_HEADERS', 'Authorization, Content-Type')
     resp.headers['Access-Control-Allow-Headers'] = env_allowed_headers
     # Set JSON content type and response length
     resp.headers['Content-Type'] = 'application/json'
