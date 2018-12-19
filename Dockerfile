@@ -20,7 +20,7 @@ WORKDIR /kb/module
 RUN pip install --upgrade pip && \
     pip install --upgrade --no-cache-dir -r requirements.txt && \
     pip install --extra-index-url https://pypi.anaconda.org/kbase/simple \
-      kbase-workspace-utils==0.0.11 && \
+      kbase-workspace-utils==0.0.13 && \
     if [ "$DEVELOPMENT" ]; then pip install -r dev-requirements.txt; fi
 
 # Run the server
