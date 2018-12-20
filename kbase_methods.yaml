@@ -1,0 +1,14 @@
+sketch_and_search:
+  title: Sketch and search genome data
+  description: >-
+    Use mash to pre-process genome data (reads, asssemblies, or annotations),
+    and search it against a database. Pass in an array of workspace object
+    addresses.
+  required_params: [upas]
+  params:
+    upas:
+      type: array
+      minItems: 1
+      items:
+        type: string
+        pattern: '\d+\/\d+\/\d+'

@@ -18,14 +18,11 @@ COPY requirements.txt /kb/module/requirements.txt
 COPY dev-requirements.txt /kb/module/dev-requirements.txt
 WORKDIR /kb/module
 RUN pip install --upgrade pip && \
-    pip install --upgrade --no-cache-dir -r requirements.txt && \
-    pip install --extra-index-url https://pypi.anaconda.org/kbase/simple \
-      kbase-workspace-utils==0.0.13 && \
-    if [ "$DEVELOPMENT" ]; then pip install -r dev-requirements.txt; fi
+    pip install --no-cache-dir -r requirements.txt && \
+    if [ "$DEVELOPMENT" ]; then pip install --no-cache-dir -r dev-requirements.txt; fi
 
 # Run the server
 COPY . /kb/module
-COPY .env.example /kb/module/.env
 RUN chmod -R a+rw /kb/module
 EXPOSE 5000
-ENTRYPOINT ["sh", "/kb/module/entrypoint.sh"]
+ENTRYPOINT ["sh", "/usr/local/bin/entrypoint.sh"]
