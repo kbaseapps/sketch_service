@@ -8,19 +8,19 @@ import traceback
 from uuid import uuid4
 
 from kbase_workspace_utils.exceptions import InvalidUser, InaccessibleWSObject, InvalidGenome
-from .autodownload import autodownload
-from .caching import upload_to_cache, get_cache_id, download_cache_string
-from .exceptions import InvalidRequestParams, UnrecognizedWSType
-from .generate_sketch import generate_sketch
-from .perform_search import perform_search
 
-os.environ['KBASE_ENV'] = os.environ.get('KBASE_ENV', 'appdev')
+from .exceptions import InvalidRequestParams, UnrecognizedWSType
+from .utils.autodownload import autodownload
+from .utils.caching import upload_to_cache, get_cache_id, download_cache_string
+from .utils.generate_sketch import generate_sketch
+from .utils.perform_search import perform_search
+
 app = flask.Flask(__name__)
 app.config['DEBUG'] = os.environ.get('FLASK_DEBUG', True)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', str(uuid4()))
 
 # AssemblyHomology database/namespace name to use
-db_name = os.environ.get('HOMOLOGY_NAMESPACE', 'NCBI_Refseq')
+_db_name = os.environ.get('HOMOLOGY_NAMESPACE', 'NCBI_Refseq')
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -43,14 +43,14 @@ def root():
     ws_ref = json_data['params'][0]
     tmp_dir = tempfile.mkdtemp()
     # Create unique identifying data for the cache
-    cache_data = {'ws_ref': ws_ref, 'db_name': db_name, 'fn': 'get_homologs'}
+    cache_data = {'ws_ref': ws_ref, 'db_name': _db_name, 'fn': 'get_homologs'}
     cache_id = get_cache_id(cache_data)
     search_result_json = download_cache_string(cache_id)
     if not search_result_json or not search_result_json.strip():
         # If it is not cached, then we generate the sketch, perform the search, and cache it
         (data_path, paired_end) = autodownload(ws_ref, tmp_dir, auth_token)
         sketch_path = generate_sketch(data_path, paired_end)
-        search_result = perform_search(sketch_path, db_name)
+        search_result = perform_search(sketch_path, _db_name)
         search_result_json = json.dumps(search_result)
         if search_result_json:
             upload_to_cache(cache_id, search_result_json)
@@ -66,11 +66,7 @@ def root():
 @app.errorhandler(InvalidRequestParams)
 def invalid_user(err):
     """Generic exception catcher, returning 400."""
-    resp = {
-        'version': '1.1',
-        'error': str(err),
-        'result': None
-    }
+    resp = {'version': '1.1', 'error': str(err), 'result': None}
     return (flask.jsonify(resp), 400)
 
 
