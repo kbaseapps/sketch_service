@@ -13,6 +13,7 @@ from .caching import upload_to_cache, get_cache_id, download_cache_string
 from .exceptions import InvalidRequestParams, UnrecognizedWSType
 from .generate_sketch import generate_sketch
 from .perform_search import perform_search
+from .verify_input import verify_int_input
 
 os.environ['KBASE_ENV'] = os.environ.get('KBASE_ENV', 'appdev')
 app = flask.Flask(__name__)
@@ -43,9 +44,7 @@ def root():
     if not json_data.get('n_max_results'):
         n_max_results = 10;
     else:
-        n_max_results = json_data.get('n_max_results')
-        if n_max_results > 100 or n_max_results < 1:
-            n_max_results = 10
+        n_max_results = verify_int_input(json_data.get('n_max_results'))
     ws_ref = json_data['params'][0]
     tmp_dir = tempfile.mkdtemp()
     # Create unique identifying data for the cache
