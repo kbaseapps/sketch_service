@@ -40,17 +40,23 @@ def root():
     auth_token = flask.request.headers.get('Authorization')
     if not json_data.get('params'):
         raise InvalidRequestParams('.params must be a list of one workspace reference.')
+    if not json_data.get('n_max_results'):
+        n_max_results = 10;
+    else:
+        n_max_results = json_data.get('n_max_results')
+        if n_max_results > 100 or n_max_results < 1:
+            n_max_results = 10
     ws_ref = json_data['params'][0]
     tmp_dir = tempfile.mkdtemp()
     # Create unique identifying data for the cache
-    cache_data = {'ws_ref': ws_ref, 'db_name': db_name, 'fn': 'get_homologs'}
+    cache_data = {'ws_ref': ws_ref, 'db_name': db_name, 'fn': 'get_homologs', 'n_max_results': n_max_results}
     cache_id = get_cache_id(cache_data)
     search_result_json = download_cache_string(cache_id)
     if not search_result_json or not search_result_json.strip():
         # If it is not cached, then we generate the sketch, perform the search, and cache it
         (data_path, paired_end) = autodownload(ws_ref, tmp_dir, auth_token)
         sketch_path = generate_sketch(data_path, paired_end)
-        search_result = perform_search(sketch_path, db_name)
+        search_result = perform_search(sketch_path, db_name, n_max_results)
         search_result_json = json.dumps(search_result)
         if search_result_json:
             upload_to_cache(cache_id, search_result_json)
