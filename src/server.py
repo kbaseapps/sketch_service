@@ -40,12 +40,14 @@ def root():
         # raise InvalidRequestParams('The Authorization header must contain a KBase auth token.')
     auth_token = flask.request.headers.get('Authorization')
     if not json_data.get('params'):
-        raise InvalidRequestParams('.params must be a list of one workspace reference.')
-    if not json_data.get('n_max_results'):
-        n_max_results = 10;
-    else:
-        n_max_results = verify_int_input(json_data.get('n_max_results'))
-    ws_ref = json_data['params'][0]
+        raise InvalidRequestParams('.params must be a dict of key ws_ref and optionally n_max_results.')
+    params = json_data.get('params')
+    if not params.get('ws_ref'):
+        raise InvalidRequestParams('.params must contain .ws_ref argument as a list of one workspace reference.')
+    n_max_results = params.get('n_max_results', 10)
+    # n_max_results argument must be an integer
+    n_max_resulst = verify_int_input(n_max_results)
+    ws_ref = params['ws_ref'][0]
     tmp_dir = tempfile.mkdtemp()
     # Create unique identifying data for the cache
     cache_data = {'ws_ref': ws_ref, 'db_name': db_name, 'fn': 'get_homologs', 'n_max_results': n_max_results}
