@@ -14,8 +14,10 @@ The service accepts POST requests with a JSON payload with the following paramet
 
 ```
 {
-  "params": <list of workspace references>,
-  "n_max_results": <int between 1 and 100 >
+  "params": {
+            "ws_ref": workspace reference
+            "n_max_results": (optional) <int> 1 < x < 100
+            }
 }
 ```
 
@@ -40,7 +42,7 @@ Build and run locally with:
 $ docker-compose up --build
 ```
 
-Run tests with `python -m unittest discover src/test`
+Run tests with `docker-compose run web test` in a separate terminal window
 
 ### Project anatomy
 

@@ -43,11 +43,11 @@ def root():
         raise InvalidRequestParams('.params must be a dict of key ws_ref and optionally n_max_results.')
     params = json_data.get('params')
     if not params.get('ws_ref'):
-        raise InvalidRequestParams('.params must contain .ws_ref argument as a list of one workspace reference.')
+        raise InvalidRequestParams('.params must contain ws_ref argument as a workspace reference.')
     n_max_results = params.get('n_max_results', 10)
     # n_max_results argument must be an integer
-    n_max_resulst = verify_int_input(n_max_results)
-    ws_ref = params['ws_ref'][0]
+    n_max_results = verify_int_input(n_max_results)
+    ws_ref = params['ws_ref']
     tmp_dir = tempfile.mkdtemp()
     # Create unique identifying data for the cache
     cache_data = {'ws_ref': ws_ref, 'db_name': db_name, 'fn': 'get_homologs', 'n_max_results': n_max_results}
