@@ -4,6 +4,23 @@ A genome "sketch" is a set of preprocessed data that makes it fast to compare ge
 
 This is a KBase dynamic (persistent) service that takes workspace IDs pointing to Assemblies, Genomes, or Reads and returns a list of similar genomes.
 
+## Usage
+
+### Basic requests
+
+From the terminal, you can use the `curl` command to access the sketch service. Since the sketch serivce is a KBase dynamic service, you will have to find its active URL by searching for it here: "https://ci.kbase.us/#catalog/services".
+
+The service accepts POST requests with a JSON payload with the following parameters:
+
+```
+{
+  "params": {
+    "ws_ref": <workspace reference>
+    "n_max_results": <integer between 1 and 100 (optional)>
+  }
+}
+```
+
 ## Development
 
 ### Set up the environment
@@ -25,7 +42,7 @@ Build and run locally with:
 $ docker-compose up --build
 ```
 
-Run tests with `python -m unittest discover src/test`
+Run tests with `docker-compose run web test` in a separate terminal window
 
 ### Project anatomy
 
