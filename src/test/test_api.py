@@ -20,7 +20,7 @@ os.environ['KBASE_SECURE_CONFIG_PARAM_service_token'] = ''
 
 def make_request(ws_ref):
     """Helper to make a JSON RPC request with the given workspace ref."""
-    post_data = {'params': [ws_ref], 'method': 'get_homologs', 'id': 0}
+    post_data = {'params': {'ws_ref': ws_ref, 'n_max_results': 2}, 'method': 'get_homologs', 'id': 0}
     headers = {'Content-Type': 'application/json', 'Authorization': service_token}
     resp = requests.post(url, data=json.dumps(post_data), headers=headers)
     return resp.json()
@@ -61,7 +61,7 @@ class TestApi(unittest.TestCase):
     def test_search_genome_no_auth(self):
         """Test a search on a Genome type."""
         genome_ref = '15792/227059/1'
-        post_data = {'params': [genome_ref], 'method': 'get_homologs', 'id': 0}
+        post_data = {'params': {'ws_ref': genome_ref}, 'method': 'get_homologs', 'id': 0}
         headers = {'Content-Type': 'application/json'}
         resp = requests.post(url, data=json.dumps(post_data), headers=headers)
         json_resp = resp.json()
