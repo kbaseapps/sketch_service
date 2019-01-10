@@ -44,9 +44,9 @@ def root():
     params = json_data.get('params')
     if not params.get('ws_ref'):
         raise InvalidRequestParams('.params must contain ws_ref argument as a workspace reference.')
-    n_max_results = params.get('n_max_results', 10)
-    # n_max_results argument must be an integer
-    n_max_results = verify_int_input(n_max_results)
+    n_max_results = json_data.get('n_max_results', 10)
+    assert isinstance(n_max_results, int), '"n_max_results" param must be an integer'
+    n_max_results = max(min(n_max_results, 100), 1)  # clamp to 1-100
     ws_ref = params['ws_ref']
     tmp_dir = tempfile.mkdtemp()
     # Create unique identifying data for the cache
