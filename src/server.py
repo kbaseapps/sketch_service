@@ -48,7 +48,6 @@ def root():
     # n_max_results argument must be an integer
     n_max_results = verify_int_input(n_max_results)
     search_db = params.get('search_db', db_name)
-    
 
     ws_ref = params['ws_ref']
     tmp_dir = tempfile.mkdtemp()
