@@ -1,7 +1,7 @@
 import json
 import requests
 
-from .config import id_mapper_url
+from ..config import load_config
 
 
 def map_refseq_ids_to_kbase(distances):
@@ -13,10 +13,11 @@ def map_refseq_ids_to_kbase(distances):
     AssemblyHomology API: https://github.com/jgi-kbase/AssemblyHomologyService#api
     """
     # Create a list of Refseq IDs
+    config = load_config()
     refseq_ids = [d['sourceid'] for d in distances]
     req_data = {"ids": refseq_ids}
     req_json = json.dumps(req_data)
-    endpoint = id_mapper_url + '/mapping/RefSeq'
+    endpoint = config['id_mapper_url'] + '/mapping/RefSeq'
     print('Getting KBase IDs for', refseq_ids)
     print('  endpoint', endpoint)
     resp = requests.get(endpoint, data=req_json)

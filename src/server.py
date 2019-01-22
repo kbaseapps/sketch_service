@@ -8,20 +8,19 @@ import traceback
 from uuid import uuid4
 
 from kbase_workspace_utils.exceptions import InvalidUser, InaccessibleWSObject, InvalidGenome
-from .autodownload import autodownload
-from .caching import upload_to_cache, get_cache_id, download_cache_string
-from .exceptions import InvalidRequestParams, UnrecognizedWSType
-from .generate_sketch import generate_sketch
-from .perform_search import perform_search
-from .verify_input import verify_int_input
 
-os.environ['KBASE_ENV'] = os.environ.get('KBASE_ENV', 'appdev')
+from .exceptions import InvalidRequestParams, UnrecognizedWSType
+from .utils.autodownload import autodownload
+from .utils.caching import upload_to_cache, get_cache_id, download_cache_string
+from .utils.generate_sketch import generate_sketch
+from .utils.perform_search import perform_search
+
 app = flask.Flask(__name__)
 app.config['DEBUG'] = os.environ.get('FLASK_DEBUG', True)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', str(uuid4()))
 
 # AssemblyHomology database/namespace name to use
-db_name = os.environ.get('HOMOLOGY_NAMESPACE', 'NCBI_Refseq')
+_db_name = os.environ.get('HOMOLOGY_NAMESPACE', 'NCBI_Refseq')
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -75,11 +74,7 @@ def root():
 @app.errorhandler(InvalidRequestParams)
 def invalid_user(err):
     """Generic exception catcher, returning 400."""
-    resp = {
-        'version': '1.1',
-        'error': str(err),
-        'result': None
-    }
+    resp = {'version': '1.1', 'error': str(err), 'result': None}
     return (flask.jsonify(resp), 400)
 
 
