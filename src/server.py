@@ -39,24 +39,30 @@ def root():
         # raise InvalidRequestParams('The Authorization header must contain a KBase auth token.')
     auth_token = flask.request.headers.get('Authorization')
     if not json_data.get('params'):
-        raise InvalidRequestParams('.params must be a dict of key ws_ref and optionally n_max_results.')
+        raise InvalidRequestParams('.params must be a dict of \'ws_ref\' and optionally \'n_max_results\' and \'search_db\'.')
     params = json_data.get('params')
     if not params.get('ws_ref'):
         raise InvalidRequestParams('.params must contain ws_ref argument as a workspace reference.')
-    n_max_results = json_data.get('n_max_results', 10)
-    assert isinstance(n_max_results, int), '"n_max_results" param must be an integer'
-    n_max_results = max(min(n_max_results, 100), 1)  # clamp to 1-100
+    n_max_results = params.get('n_max_results', 10)
+    # n_max_results argument must be an integer
+    if not isinstance(n_max_results, int):
+        raise ValueError("n_max_results must be an integer")
+    if n_max_results < 1 or n_max_results > 100:
+        print("n_max_results out of bounds (1< x < 100), resetting to 10")
+        n_max_results = 10
+    search_db = params.get('search_db', _db_name)
+
     ws_ref = params['ws_ref']
     tmp_dir = tempfile.mkdtemp()
     # Create unique identifying data for the cache
-    cache_data = {'ws_ref': ws_ref, 'db_name': _db_name, 'fn': 'get_homologs', 'n_max_results': n_max_results}
+    cache_data = {'ws_ref': ws_ref, 'db_name': search_db, 'fn': 'get_homologs', 'n_max_results': n_max_results}
     cache_id = get_cache_id(cache_data)
     search_result_json = download_cache_string(cache_id)
     if not search_result_json or not search_result_json.strip():
         # If it is not cached, then we generate the sketch, perform the search, and cache it
         (data_path, paired_end) = autodownload(ws_ref, tmp_dir, auth_token)
         sketch_path = generate_sketch(data_path, paired_end)
-        search_result = perform_search(sketch_path, _db_name, n_max_results)
+        search_result = perform_search(sketch_path, search_db, n_max_results)
         search_result_json = json.dumps(search_result)
         if search_result_json:
             upload_to_cache(cache_id, search_result_json)
