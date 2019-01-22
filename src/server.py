@@ -50,7 +50,7 @@ def root():
     if n_max_results < 1 or n_max_results > 100:
         print("n_max_results out of bounds (1< x < 100), resetting to 10")
         n_max_results = 10
-    search_db = params.get('search_db', db_name)
+    search_db = params.get('search_db', _db_name)
 
     ws_ref = params['ws_ref']
     tmp_dir = tempfile.mkdtemp()
