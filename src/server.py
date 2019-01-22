@@ -45,7 +45,11 @@ def root():
         raise InvalidRequestParams('.params must contain ws_ref argument as a workspace reference.')
     n_max_results = params.get('n_max_results', 10)
     # n_max_results argument must be an integer
-    n_max_results = verify_int_input(n_max_results)
+    if not isinstance(n_max_results, int):
+        raise ValueError("n_max_results must be an integer")
+    if n_max_results < 1 or n_max_results > 100:
+        print("n_max_results out of bounds (1< x < 100), resetting to 10")
+        n_max_results = 10
     search_db = params.get('search_db', db_name)
 
     ws_ref = params['ws_ref']
