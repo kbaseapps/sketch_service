@@ -39,7 +39,7 @@ You can use the following env vars:
 Build and run locally with:
 
 ```sh
-$ docker-compose up --build
+$ docker-compose up
 ```
 
 Run tests with `docker-compose run web test` in a separate terminal window
