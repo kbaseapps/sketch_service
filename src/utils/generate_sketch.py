@@ -13,11 +13,11 @@ def generate_sketch(file_path, search_db, paired_end=False):
     # first thing we want to do is query for the k-mer size.
     resp = requests.get('homology.kbase.us/namespace/'+search_db+'/')
     json_resp = resp.json()
-    if 'sketchsize' in json_resp and json['sketchsize'] is not None:
+    if 'sketchsize' in json_resp and json_resp['sketchsize'] is not None:
         s = str(json_resp['sketchsize'])
     else:
         s = '10000'
-    if 'kmersize' in json_resp and json['kmersize'] is not None:
+    if 'kmersize' in json_resp and json_resp['kmersize'] is not None:
         k = str(json_resp['kmersize'])
     else:
         k = '19'
