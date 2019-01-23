@@ -1,7 +1,7 @@
 module-name: sketch_service
 module-description: Service that returns similar genomes from a given assembly/genome ID
 service-language: python
-module-version: 0.1.1
+module-version: 0.1.2
 owners: [jayrbolton, slebras]
 service-config:
   dynamic-service: true
