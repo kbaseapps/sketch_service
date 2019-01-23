@@ -14,16 +14,16 @@ def generate_sketch(file_path, search_db, paired_end=False):
     resp = requests.get('https://homology.kbase.us/namespace/{}/'.format(search_db))
     json_resp = resp.json()
     if json_resp.get('sketchsize'):
-        s = str(json_resp['sketchsize'])
+        sketchsize = str(json_resp['sketchsize'])
     else:
-        s = '10000'
+        sketchsize = '10000'
     if json_resp.get('kmersize'):
-        k = str(json_resp['kmersize'][0])
+        kmersize = str(json_resp['kmersize'][0])
     else:
-        k = '19'
+        kmersize = '19'
     output_name = os.path.basename(file_path + '.msh')
     output_path = os.path.join(os.path.dirname(file_path), output_name)
-    args = ['mash', 'sketch', file_path, '-o', output_path, '-k', k, '-s', s]
+    args = ['mash', 'sketch', file_path, '-o', output_path, '-k', kmersize, '-s', sketchsize]
     if paired_end:
         # For paired end reads, sketch the reads using -m 2 to improve results by ignoring
         # single-copy k-mers, which are more likely to be erroneous.
