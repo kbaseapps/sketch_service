@@ -18,7 +18,7 @@ def generate_sketch(file_path, search_db, paired_end=False):
     else:
         s = '10000'
     if 'kmersize' in json_resp and json_resp['kmersize'] is not None:
-        k = str(json_resp['kmersize'])
+        k = str(json_resp['kmersize'][0])
     else:
         k = '19'
     output_name = os.path.basename(file_path + '.msh')
