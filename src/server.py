@@ -61,7 +61,7 @@ def root():
     if not search_result_json or not search_result_json.strip():
         # If it is not cached, then we generate the sketch, perform the search, and cache it
         (data_path, paired_end) = autodownload(ws_ref, tmp_dir, auth_token)
-        sketch_path = generate_sketch(data_path, paired_end)
+        sketch_path = generate_sketch(data_path, search_db, paired_end)
         search_result = perform_search(sketch_path, search_db, n_max_results)
         search_result_json = json.dumps(search_result)
         if search_result_json:
