@@ -1,5 +1,6 @@
 import os
 import subprocess  # nosec
+import requests
 
 
 def generate_sketch(file_path, search_db, paired_end=False):
@@ -9,8 +10,11 @@ def generate_sketch(file_path, search_db, paired_end=False):
       downloaded_file is a DownloadedFile namedtuple defined in ./download_file.py
     Returns the full path of the sketch file
     """
-    if search_db == 'JGI_MAGS':
-        k = '21'
+    # first thing we want to do is query for the k-mer size.
+    resp = requests.get('homology.kbase.us/namespace/'+search_db+'/')
+    json_resp = resp.json()
+    if 'kmersize' in json_resp:
+        k = str(json_resp['kmersize'])
     else:
         k = '19'
     output_name = os.path.basename(file_path + '.msh')
