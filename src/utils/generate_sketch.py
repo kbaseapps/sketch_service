@@ -11,7 +11,7 @@ def generate_sketch(file_path, search_db, paired_end=False):
     Returns the full path of the sketch file
     """
     # first thing we want to do is query for the k-mer size.
-    resp = requests.get('homology.kbase.us/namespace/'+search_db+'/')
+    resp = requests.get('https://homology.kbase.us/namespace/{}/'.format(search_db))
     json_resp = resp.json()
     if 'sketchsize' in json_resp and json_resp['sketchsize'] is not None:
         s = str(json_resp['sketchsize'])

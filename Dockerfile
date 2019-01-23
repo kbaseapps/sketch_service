@@ -18,8 +18,8 @@ COPY requirements.txt /kb/module/requirements.txt
 COPY dev-requirements.txt /kb/module/dev-requirements.txt
 WORKDIR /kb/module
 RUN pip install --upgrade pip && \
-    pip install --upgrade --no-cache-dir -r requirements.txt && \
-    pip install --extra-index-url https://pypi.anaconda.org/kbase/simple \
+    pip install --upgrade --extra-index-url https://pypi.anaconda.org/kbase/simple \
+      -r requirements.txt \
       kbase-workspace-utils==0.0.13 && \
     if [ "$DEVELOPMENT" ]; then pip install -r dev-requirements.txt; fi
 
