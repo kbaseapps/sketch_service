@@ -1,5 +1,4 @@
 import json
-import time
 import tempfile
 import os
 import shutil
@@ -14,6 +13,7 @@ from .utils.autodownload import autodownload
 from .utils.caching import upload_to_cache, get_cache_id, download_cache_string
 from .utils.generate_sketch import generate_sketch
 from .utils.perform_search import perform_search
+from .config import load_config
 
 app = flask.Flask(__name__)
 app.config['DEBUG'] = os.environ.get('FLASK_DEBUG', True)
@@ -30,14 +30,25 @@ def root():
     Reference: https://jsonrpc.org/historical/json-rpc-1-1-wd.html
     We ignore the "method" parameter here as this service has only one function.
     """
-    start_time = time.time()
-    json_data = json.loads(flask.request.get_data())
-    print('performing search..')
-    if not json_data:
+    try:
+        json_data = json.loads(flask.request.get_data())
+    except Exception:
         raise InvalidRequestParams('Pass in a JSON body with RPC parameters.')
-    # if not flask.request.headers.get('Authorization'):
-        # raise InvalidRequestParams('The Authorization header must contain a KBase auth token.')
     auth_token = flask.request.headers.get('Authorization')
+    method = json_data.get('method')
+    if method == 'show_config':
+        return show_config(json_data)
+    elif method == 'get_homologs':
+        return get_homologs(json_data, auth_token)
+    else:
+        resp = {
+            'error': 'Invalid method. Valid methods are "get_homologs" or "show_config"',
+            'version': '1.1'
+        }
+        return (flask.jsonify(resp), 400)
+
+
+def get_homologs(json_data, auth_token):
     if not json_data.get('params'):
         raise InvalidRequestParams('.params must be a dict of \'ws_ref\' and optionally \'n_max_results\' and \'search_db\'.')
     params = json_data.get('params')
@@ -67,8 +78,16 @@ def root():
         if search_result_json:
             upload_to_cache(cache_id, search_result_json)
     shutil.rmtree(tmp_dir)  # Clean up all temp files
-    print('total request time:', time.time() - start_time)
     return '{"version": "1.1", "result": ' + search_result_json + '}'
+
+
+def show_config(json_data):
+    config = load_config()
+    config['service_token'] = bool(config['service_token'])
+    return flask.jsonify({
+        'result': config,
+        'version': '1.1'
+    })
 
 
 @app.errorhandler(InvalidUser)
