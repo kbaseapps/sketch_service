@@ -1,4 +1,4 @@
-# KBase Sketch Service
+# KBase Genome Sketch Service
 
 A genome "sketch" is a set of preprocessed data that makes it fast to compare genomes and get a similarity score. This is useful for doing genome searches, where you can find a list of similar genomes from a query genome.
 
