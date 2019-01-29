@@ -6,9 +6,7 @@ import flask
 import traceback
 from uuid import uuid4
 
-from kbase_workspace_utils.exceptions import InvalidUser, InaccessibleWSObject, InvalidGenome
-
-from .exceptions import InvalidRequestParams, UnrecognizedWSType
+from .exceptions import InvalidRequestParams
 from .utils.autodownload import autodownload
 from .utils.caching import upload_to_cache, get_cache_id, download_cache_string
 from .utils.generate_sketch import generate_sketch
@@ -49,15 +47,11 @@ def root():
 
 
 def get_homologs(json_data, auth_token):
-    if not json_data.get('params'):
-        raise InvalidRequestParams('.params must be a dict of \'ws_ref\' and optionally \'n_max_results\' and \'search_db\'.')
     params = json_data.get('params')
-    if not params.get('ws_ref'):
-        raise InvalidRequestParams('.params must contain ws_ref argument as a workspace reference.')
+    assert params and params.get('ws_ref'), "params must contain a 'ws_ref'"
     n_max_results = params.get('n_max_results', 10)
     # n_max_results argument must be an integer
-    if not isinstance(n_max_results, int):
-        raise ValueError("n_max_results must be an integer")
+    assert isinstance(n_max_results, int), "n_max_results must be an integer"
     if n_max_results < 1 or n_max_results > 100:
         print("n_max_results out of bounds (1< x < 100), resetting to 10")
         n_max_results = 10
@@ -90,17 +84,6 @@ def show_config(json_data):
     })
 
 
-@app.errorhandler(InvalidUser)
-@app.errorhandler(UnrecognizedWSType)
-@app.errorhandler(InvalidGenome)
-@app.errorhandler(InaccessibleWSObject)
-@app.errorhandler(InvalidRequestParams)
-def invalid_user(err):
-    """Generic exception catcher, returning 400."""
-    resp = {'version': '1.1', 'error': str(err), 'result': None}
-    return (flask.jsonify(resp), 400)
-
-
 @app.errorhandler(404)
 def page_not_found(err):
     """Return a JSON data for 404."""
@@ -113,12 +96,14 @@ def page_not_found(err):
 
 
 @app.errorhandler(Exception)
-def any_exception(err):
-    """A catch-all for any exceptions we didn't explicitly handle above."""
-    traceback.print_exc()
+def general_exception(err):
+    trace = traceback.format_exc()
     resp = {
+        'error': {
+            'message': str(err),
+            'trace': trace
+        },
         'version': '1.1',
-        'error': str(err),
         'result': None
     }
     return (flask.jsonify(resp), 500)

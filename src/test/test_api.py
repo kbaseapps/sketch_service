@@ -98,7 +98,7 @@ class TestApi(unittest.TestCase):
         print('-' * 80)
         print(json_resp)
         print('-' * 80)
-        self.assertTrue('no assembly or contigset references' in json_resp['error'])
+        self.assertTrue('no assembly or contigset references' in json_resp['error']['message'])
 
     def test_search_invalid_ws_id(self):
         """Test a search with an invalid workspace reference ID."""
@@ -107,7 +107,7 @@ class TestApi(unittest.TestCase):
         print('-' * 80)
         print(json_resp)
         print('-' * 80)
-        self.assertTrue(len(json_resp['error']))
+        self.assertTrue(len(json_resp['error']['message']))
 
     def test_search_unauthorized_ws_id(self):
         """Test a search with an unauthorized workspace ref."""
@@ -116,4 +116,4 @@ class TestApi(unittest.TestCase):
         print('-' * 80)
         print(json_resp)
         print('-' * 80)
-        self.assertTrue(len(json_resp['error']))
+        self.assertTrue(len(json_resp['error']['message']))
