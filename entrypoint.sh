@@ -6,12 +6,20 @@
 # Set the number of gevent workers to number of cores * 2 + 1
 # See: http://docs.gunicorn.org/en/stable/design.html#how-many-workers
 n_workers="$(($(nproc) * 2 + 1))"
+# Use the WORKERS environment variable, if present
+workers=${WORKERS:-$calc_workers}
 
 # Persistent server mode (aka "dynamic service"):
 # This is run when there are no arguments
 if [ $# -eq 0 ] ; then
   echo "Running in persistent server mode"
-  gunicorn --worker-class gevent --timeout 1800 --workers $n_workers -b :5000 --reload src.server:app
+  gunicorn \
+    --worker-class gevent \
+    --timeout 1800 \
+    --workers $n_workers \
+    --bind :5000 \
+    ${DEVELOPMENT:+"--reload"} \
+    src.server:app
 
 # Run tests
 elif [ "${1}" = "test" ] ; then
