@@ -52,9 +52,6 @@ def get_homologs(json_data, auth_token):
     n_max_results = params.get('n_max_results', 10)
     # n_max_results argument must be an integer
     assert isinstance(n_max_results, int), "n_max_results must be an integer"
-    if n_max_results < 1 or n_max_results > 100:
-        print("n_max_results out of bounds (1< x < 100), resetting to 10")
-        n_max_results = 10
     search_db = params.get('search_db', _db_name)
 
     ws_ref = params['ws_ref']
