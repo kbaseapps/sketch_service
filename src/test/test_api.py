@@ -109,6 +109,15 @@ class TestApi(unittest.TestCase):
         print('-' * 80)
         self.assertTrue(len(json_resp['error']['message']))
 
+    def test_search_strain(self):
+        ref = '34819/8/1'
+        json_resp = make_request(ref)
+        print('-' * 80)
+        print(json_resp)
+        print('-' * 80)
+        result = json_resp['result']
+        self.assertTrue('strain' in result['distances'][0])
+
     def test_search_unauthorized_ws_id(self):
         """Test a search with an unauthorized workspace ref."""
         ref = '/search/1/2/3'
