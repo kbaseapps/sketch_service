@@ -18,10 +18,10 @@ COPY requirements.txt /kb/module/requirements.txt
 COPY dev-requirements.txt /kb/module/dev-requirements.txt
 WORKDIR /kb/module
 RUN pip install --upgrade pip && \
+    pip install pandas && \
     pip install --upgrade --extra-index-url https://pypi.anaconda.org/kbase/simple \
       -r requirements.txt \
       kbase-workspace-utils==0.0.13 && \
-      pandas && \
     if [ "$DEVELOPMENT" ]; then pip install -r dev-requirements.txt; fi
 
 # Run the server
