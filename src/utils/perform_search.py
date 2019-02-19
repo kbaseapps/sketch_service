@@ -3,6 +3,7 @@ import os
 import requests
 
 from .map_refseq_ids import map_refseq_ids_to_kbase
+from .map_strains import map_strains
 
 
 def perform_search(sketch_path, db_name, max_results=10):
@@ -18,8 +19,10 @@ def perform_search(sketch_path, db_name, max_results=10):
     print('search done in', time.time() - start_time)
     if response.status_code == 200:
         resp_json = response.json()
-        # Convert Refseq IDs into KBase IDs
-        resp_json['distances'] = map_refseq_ids_to_kbase(resp_json['distances'])
+        # Convert Refseq IDs into KBase IDs (only does these if we are in the refseq namespace)
+        if db_name == "NCBI_Refseq":
+            resp_json['distances'] = map_refseq_ids_to_kbase(resp_json['distances'])
+            resp_json['distances'] = map_strains(resp_json['distances'])
         return resp_json
     else:
         raise Exception('Error performing search: ' + response.text)
