@@ -21,6 +21,7 @@ RUN pip install --upgrade pip && \
     pip install --upgrade --extra-index-url https://pypi.anaconda.org/kbase/simple \
       -r requirements.txt \
       kbase-workspace-utils==0.0.13 && \
+      pandas && \
     if [ "$DEVELOPMENT" ]; then pip install -r dev-requirements.txt; fi
 
 # Run the server
