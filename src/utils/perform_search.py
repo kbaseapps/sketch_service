@@ -20,8 +20,9 @@ def perform_search(sketch_path, db_name, max_results=10):
     if response.status_code == 200:
         resp_json = response.json()
         # Convert Refseq IDs into KBase IDs (only does these if we are in the refseq namespace)
-        resp_json['distances'] = map_refseq_ids_to_kbase(resp_json['distances'])
-        resp_json['distances'] = map_strains(resp_json['distances'])
+        if db_name == "NCBI_Refseq":
+            resp_json['distances'] = map_refseq_ids_to_kbase(resp_json['distances'])
+            resp_json['distances'] = map_strains(resp_json['distances'])
         return resp_json
     else:
         raise Exception('Error performing search: ' + response.text)
