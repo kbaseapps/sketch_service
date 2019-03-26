@@ -48,10 +48,12 @@ def root():
 
 def get_homologs(json_data, auth_token):
     params = json_data.get('params')
-    assert params and params.get('ws_ref'), "params must contain a 'ws_ref'"
+    if not params.get('ws_ref'):
+        raise RuntimeError("params must contain 'ws_ref' (a workspace reference to an object)")
     n_max_results = params.get('n_max_results', 10)
     # n_max_results argument must be an integer
-    assert isinstance(n_max_results, int), "n_max_results must be an integer"
+    if not isinstance(n_max_results, int):
+        raise RuntimeError("n_max_results must be an integer")
     search_db = params.get('search_db', _db_name)
 
     ws_ref = params['ws_ref']
@@ -59,17 +61,21 @@ def get_homologs(json_data, auth_token):
     # Create unique identifying data for the cache
     cache_data = {'ws_ref': ws_ref, 'db_name': search_db, 'fn': 'get_homologs', 'n_max_results': n_max_results}
     cache_id = get_cache_id(cache_data)
-    search_result_json = download_cache_string(cache_id)
-    if not search_result_json or not search_result_json.strip():
+    try:
+        cached = download_cache_string(cache_id)
+        search_result = json.loads(cached)
+    except Exception:
         # If it is not cached, then we generate the sketch, perform the search, and cache it
         (data_path, paired_end) = autodownload(ws_ref, tmp_dir, auth_token)
         sketch_path = generate_sketch(data_path, search_db, paired_end)
         search_result = perform_search(sketch_path, search_db, n_max_results)
-        search_result_json = json.dumps(search_result)
-        if search_result_json:
-            upload_to_cache(cache_id, search_result_json)
+        if search_result:
+            upload_to_cache(cache_id, json.dumps(search_result))
     shutil.rmtree(tmp_dir)  # Clean up all temp files
-    return '{"version": "1.1", "result": ' + search_result_json + '}'
+    return flask.jsonify({
+        'version': '1.1',
+        'result': search_result
+    })
 
 
 def show_config(json_data):
