@@ -63,7 +63,6 @@ def get_homologs(json_data, auth_token):
     cache_id = get_cache_id(cache_data)
     try:
         cached = download_cache_string(cache_id)
-        print('DOWNLOADED CACHE CONTENT', cached)
         search_result = json.loads(cached)
     except Exception:
         # If it is not cached, then we generate the sketch, perform the search, and cache it
