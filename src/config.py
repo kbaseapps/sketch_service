@@ -1,6 +1,8 @@
 import os
 from urllib.parse import urljoin
 
+from kbase_cache_client import KBaseCacheClient
+
 
 def load_config():
     kbase_endpoint = os.environ.get('KBASE_ENDPOINT', 'https://ci.kbase.us/services')
@@ -14,10 +16,12 @@ def load_config():
         urljoin(kbase_endpoint + '/', 'idmapper/api/v1')
     )
     homology_url = os.environ.get('KBASE_HOMOLOGY_URL', 'https://homology.kbase.us')
+    client = KBaseCacheClient(kbase_endpoint, token=service_token)
     return {
         'homology_url': homology_url,
         'id_mapper_url': id_mapper_url,
         'caching_service_url': caching_service_url,
         'service_token': service_token,
-        'kbase_endpoint': kbase_endpoint
+        'kbase_endpoint': kbase_endpoint,
+        'cache_client': client
     }

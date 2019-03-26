@@ -24,7 +24,7 @@ if [ $# -eq 0 ] ; then
 # Run tests
 elif [ "${1}" = "test" ] ; then
   echo "Running tests..."
-  flake8 --max-complexity 5 src
+  flake8 --max-complexity 10 src
   mypy --ignore-missing-imports src
   python -m pyflakes src
   bandit -r src
