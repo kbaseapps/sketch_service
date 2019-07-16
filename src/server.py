@@ -33,7 +33,7 @@ def root():
     except Exception:
         raise InvalidRequestParams('Pass in a JSON body with RPC parameters.')
     auth_token = flask.request.headers.get('Authorization')
-    method = json_data.get('method')
+    method = json_data.get('method', 'show_config')
     if method == 'show_config':
         return show_config(json_data)
     elif method == 'get_homologs':
