@@ -47,6 +47,8 @@ def root():
 
 
 def get_homologs(json_data, auth_token):
+    """
+    """
     params = json_data.get('params')
     assert params and params.get('ws_ref'), "params must contain a 'ws_ref'"
     n_max_results = params.get('n_max_results', 10)
