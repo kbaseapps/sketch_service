@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 
+
 def map_strains(distances):
     # strain names for refseq from csv file
     print('distances', distances)
