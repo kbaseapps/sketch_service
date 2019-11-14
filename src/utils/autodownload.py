@@ -1,7 +1,8 @@
-import kbase_workspace_utils as ws
+# import kbase_workspace_utils as ws
+from kbase_workspace_client import WorkspaceClient
 
 from ..exceptions import UnrecognizedWSType
-
+from ..config import load_config
 
 # String patterns for every downloadable workspace type that this service can support
 valid_types = {
@@ -24,23 +25,26 @@ def autodownload(ref, save_dir, auth_token):
       paired_end is a boolean indicating if these are paired-end reads
     The generate_sketch function needs to know if it's working with paired-end reads or not
     """
-    ws_obj = ws.download_obj(ref=ref, auth_token=auth_token)
+    config = load_config()
+    ws = WorkspaceClient(url=config.get("workspace_url", "https://ci.kbase.us/services/ws"), token=auth_token)
+    ws_obj = ws.req("get_objects2", {'objects': [{"ref": ref}], 'no_data': 1})
+
     ws_type = ws_obj['data'][0]['info'][2]
     if valid_types['reads_paired'] in ws_type:
-        paths = ws.download_reads(ref, save_dir, auth_token)
+        paths = ws.download_reads_fastq(ref, save_dir)
         output_path = paths[0].replace(".paired.fwd.fastq", ".fastq")
         concatenate_files(paths, output_path)
         return (output_path, True)
     elif valid_types['reads_single'] in ws_type:
-        paths = ws.download_reads(ref, save_dir, auth_token)
+        paths = ws.download_reads_fastq(ref, save_dir)
         output_path = paths[0]
         return (output_path, False)
     elif valid_types['assembly'] in ws_type or valid_types['assembly_legacy'] in ws_type:
-        path = ws.download_assembly(ref, save_dir, auth_token)
+        path = ws.download_assembly_fasta(ref, save_dir)
         return (path, False)
     elif valid_types['genome'] in ws_type:
-        ref = ws.get_assembly_from_genome(ref, auth_token)
-        path = ws.download_assembly(ref, save_dir, auth_token)
+        ref = ws.get_assembly_from_genome(ref)
+        path = ws.download_assembly_fasta(ref, save_dir)
         return (path, False)
     else:
         raise UnrecognizedWSType(ws_type, valid_types)

@@ -3,3 +3,4 @@ bandit==1.4.0
 mccabe==0.6.1
 flake8==3.5.0
 coverage==4.5.1
+biopython
