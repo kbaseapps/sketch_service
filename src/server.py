@@ -47,8 +47,6 @@ def root():
 
 
 def get_homologs(json_data, auth_token):
-    """
-    """
     params = json_data.get('params')
     if not params.get('ws_ref'):
         raise RuntimeError("params must contain 'ws_ref' (a workspace reference to an object)")
