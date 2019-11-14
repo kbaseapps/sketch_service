@@ -17,7 +17,7 @@ def map_refseq_ids_to_kbase(distances):
     refseq_ids = [d['sourceid'] for d in distances]
     req_data = {"ids": refseq_ids}
     req_json = json.dumps(req_data)
-    endpoint = config['id_mapper_url'] + '/mapping/RefSeq'
+    endpoint = config['id_mapper_url'] + '/mapping/RefSeq/'
     print('Getting KBase IDs for', refseq_ids)
     print('  endpoint', endpoint)
     resp = requests.get(endpoint, data=req_json)
