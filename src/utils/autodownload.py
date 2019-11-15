@@ -26,7 +26,7 @@ def autodownload(ref, save_dir, auth_token):
     The generate_sketch function needs to know if it's working with paired-end reads or not
     """
     config = load_config()
-    ws = WorkspaceClient(url=config["workspace_url"], token=auth_token)
+    ws = WorkspaceClient(url=config["kbase_endpoint"], token=auth_token)
     ws_obj = ws.req("get_objects2", {'objects': [{"ref": ref}], 'no_data': 1})
 
     ws_type = ws_obj['data'][0]['info'][2]
