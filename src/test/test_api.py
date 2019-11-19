@@ -20,7 +20,7 @@ os.environ['KBASE_SECURE_CONFIG_PARAM_service_token'] = ''
 
 def make_request(ws_ref):
     """Helper to make a JSON RPC request with the given workspace ref."""
-    post_data = {'params': {'ws_ref': ws_ref, 'n_max_results': 2}, 'method': 'get_homologs', 'id': 0}
+    post_data = {'params': {'ws_ref': ws_ref, 'n_max_results': 2, 'bypass_caching': True}, 'method': 'get_homologs', 'id': 0}
     headers = {'Content-Type': 'application/json', 'Authorization': service_token}
     resp = requests.post(url, data=json.dumps(post_data), headers=headers)
     return resp.json()
