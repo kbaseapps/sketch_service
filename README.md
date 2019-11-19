@@ -17,6 +17,7 @@ The service accepts POST requests with a JSON payload with the following paramet
   "params": {
     "ws_ref": <workspace reference>
     "n_max_results": <integer between 1 and 100 (optional)>
+    "bypass_caching": <boolean (optional)>
   }
 }
 ```
