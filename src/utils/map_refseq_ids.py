@@ -1,7 +1,7 @@
 import json
 import requests
 
-from ..config import load_config
+from src.config import load_config
 
 
 def map_refseq_ids_to_kbase(distances):
@@ -18,17 +18,15 @@ def map_refseq_ids_to_kbase(distances):
     req_data = {"ids": refseq_ids}
     req_json = json.dumps(req_data)
     endpoint = config['id_mapper_url'] + '/mapping/RefSeq'
-    print('Getting KBase IDs for', refseq_ids)
-    print('  endpoint', endpoint)
+    print(f"Getting KBase IDs for {refseq_ids} using endpoint {endpoint}")
     resp = requests.get(endpoint, data=req_json)
     # Handle any error case from the ID Mapper by exiting and logging everything
     if not resp.ok:
         print('=' * 80)
-        print('ID Mapping error')
-        print(resp.content)
-        print(resp.status_code)
+        print(f'ID Mapping error with status code {resp.status_code}')
+        print(resp.text)
         print('=' * 80)
-        raise Exception("Error from the ID Mapping service: " + resp.text)
+        raise Exception(f"Error from the ID Mapping service: {resp.text}")
     resp_json = resp.json()
     print('  response', resp.text)
     # Create a dict of indexes where each key is the refseq ID so we can refer to it below

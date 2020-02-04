@@ -16,6 +16,7 @@ services:
       - FLASK_ENV=development
       - FLASK_DEBUG=1
       - DEVELOPMENT=1
+      - WORKERS=1
     ports:
       - 5000:5000
     volumes:
