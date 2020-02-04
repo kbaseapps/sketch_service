@@ -19,7 +19,7 @@ def map_refseq_ids_to_kbase(distances):
     req_json = json.dumps(req_data)
     endpoint = config['id_mapper_url'] + '/mapping/RefSeq'
     print(f"Getting KBase IDs for {refseq_ids} using endpoint {endpoint}")
-    resp = requests.get(endpoint, data=req_json)
+    resp = requests.get(endpoint, data=req_json, timeout=999)
     # Handle any error case from the ID Mapper by exiting and logging everything
     if not resp.ok:
         print('=' * 80)

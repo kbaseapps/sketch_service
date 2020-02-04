@@ -34,17 +34,16 @@ def _retry_request(url, data, params, max_retries=7):
     start = time.time()
     while True:
         try:
-            resp = requests.post(url, data=data, params=params)
+            resp = requests.post(url, data=data, params=params, timeout=999)
             if resp.ok:
                 return resp
         except Exception as err:
             elapsed = time.time() - start
             sys.stderr.write(f"Error requesting AssemblyHomologyService: {err}\n")
         tries += 1
-        sys.stderr.write(
-            f"Request to AssemblyHomologyService failed after {elapsed}s:\n"
-            f"{resp.text}.\nRetrying..\n"
-        )
+        sys.stderr.write(f"Request to AssemblyHomologyService failed after {elapsed}s. Retrying..\n")
+        if resp:
+            sys.stderr.write(resp.text + '\n')
         if tries > max_retries:
             elapsed = time.time() - start
             raise RuntimeError(f"Failed requesting AssemblyHomologyService in {elapsed}s")

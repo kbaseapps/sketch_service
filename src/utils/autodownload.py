@@ -42,12 +42,12 @@ def autodownload(ref, save_dir, auth_token):
         print(f'Downloaded fastq file(s) to {output_path}')
         return (output_path, False)
     elif valid_types['assembly'] in ws_type or valid_types['assembly_legacy'] in ws_type:
-        path = ws.download_assembly(ref, save_dir)
+        path = ws.download_assembly_fasta(ref, save_dir)
         print(f'Downloaded fasta file(s) from Assembly to {path}')
         return (path, False)
     elif valid_types['genome'] in ws_type:
         ref = ws.get_assembly_from_genome(ref)
-        path = ws.download_assembly(ref, save_dir)
+        path = ws.download_assembly_fasta(ref, save_dir)
         print(f'Downloaded fasta file(s) from Genome to {path}')
         return (path, False)
     else:

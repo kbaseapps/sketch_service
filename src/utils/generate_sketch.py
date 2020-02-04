@@ -15,13 +15,15 @@ def generate_sketch(file_path, search_db, paired_end=False):
     config = load_config()
     # Fetch the k-mer size
     url = f"{config['homology_url']}/namespace/{search_db}"
-    resp = requests.get(url)
+    resp = requests.get(url, timeout=999)
     json_resp = resp.json()
     sketch_size = str(json_resp.get('sketchsize', 10000))
-    kmer_size = str(json_resp.get('kmersize', 19))
+    kmer_size = json_resp.get('kmersize', 19)
+    if isinstance(kmer_size, list):
+        kmer_size = kmer_size[0]
     output_name = os.path.basename(file_path + '.msh')
     output_path = os.path.join(os.path.dirname(file_path), output_name)
-    args = ['mash', 'sketch', file_path, '-o', output_path, '-k', kmer_size, '-s', sketch_size]
+    args = ['mash', 'sketch', file_path, '-o', output_path, '-k', str(kmer_size), '-s', sketch_size]
     print(f"Generating sketch with command: {' '.join(args)}")
     if paired_end:
         # For paired end reads, sketch the reads using -m 2 to improve results by ignoring
