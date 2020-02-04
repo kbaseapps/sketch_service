@@ -167,15 +167,3 @@ def after_request(resp):
     resp.headers['Content-Type'] = 'application/json'
     resp.headers['Content-Length'] = resp.calculate_content_length()
     return resp
-
-
-def _unknown_method_resp(method, json_data):
-    resp = {
-        'error': {
-            'name': 'UnknownMethod',
-            'message': 'Unknown method "{method}"'
-        },
-        'id': json_data.get('id'),
-        'version': '1.1'
-    }
-    return (flask.jsonify(resp), 400)
