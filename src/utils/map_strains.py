@@ -4,7 +4,6 @@ import os
 
 def map_strains(distances):
     # strain names for refseq from csv file
-    print('distances', distances)
     curr_path = __file__
     csv_path = os.path.join(os.path.dirname(curr_path), 'data', 'gcf_strain_map.csv')
     df = pd.read_csv(csv_path)
