@@ -149,7 +149,7 @@ def general_exception(err):
     resp = {
         'error': {
             'message': str(err),
-            'class': err.__class__.__name__
+            'name': err.__class__.__name__
         },
         'version': '1.1',
         'result': None
