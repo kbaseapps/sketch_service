@@ -7,7 +7,7 @@
 # See: http://docs.gunicorn.org/en/stable/design.html#how-many-workers
 n_workers="$(($(nproc) * 2 + 1))"
 # Use the WORKERS environment variable, if present
-workers=${WORKERS:-$calc_workers}
+workers=${WORKERS:-$n_workers}
 
 # Persistent server mode (aka "dynamic service"):
 # This is run when there are no arguments
@@ -16,7 +16,7 @@ if [ $# -eq 0 ] ; then
   gunicorn \
     --worker-class gevent \
     --timeout 1800 \
-    --workers $n_workers \
+    --workers $workers \
     --bind :5000 \
     ${DEVELOPMENT:+"--reload"} \
     src.server:app
