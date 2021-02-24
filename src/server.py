@@ -44,12 +44,12 @@ def root():
 def get_homologs(json_data, auth_token):
     params = json_data.get('params')
     if not params.get('ws_ref'):
-        raise InvalidParams(json_data.get('id'), f"Params must contain `ws_ref` (workspace object reference)")
+        raise InvalidParams(json_data.get('id'), "Params must contain `ws_ref` (workspace object reference)")
     n_max_results = params.get('n_max_results', 10)
     bypass_caching = params.get('bypass_caching', False)
     # n_max_results argument must be an integer
     if not isinstance(n_max_results, int):
-        raise InvalidParams(json_data.get('id'), f"`n_max_results` must be an integer")
+        raise InvalidParams(json_data.get('id'), "`n_max_results` must be an integer")
     search_db = params.get('search_db', _db_name)
     ws_ref = params['ws_ref']
     print(f"Fetching homologs for object {ws_ref}")

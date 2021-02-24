@@ -15,7 +15,7 @@ load_dotenv('.env')
 # The URL of the running server from within the docker container
 url = 'http://web:5000'
 service_token = os.environ['KBASE_SECURE_CONFIG_PARAM_service_token']
-os.environ['KBASE_SECURE_CONFIG_PARAM_service_token'] = ''
+os.environ['KBASE_SECURE_CONFIG_PARAM_service_token'] = ''  # nosec
 
 
 def make_request(ws_ref):
