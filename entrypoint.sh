@@ -28,7 +28,7 @@ elif [ "${1}" = "test" ] ; then
   mypy --ignore-missing-imports src
   python -m pyflakes src
   bandit -r src
-  python -m unittest discover src/test
+  pytest -s -vv --cov=src --cov-report=term --cov-report=xml src/test
   echo "...done running tests."
 
 # One-off jobs
