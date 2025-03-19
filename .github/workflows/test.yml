@@ -27,11 +27,19 @@ jobs:
         with:
           python-version: 3.9.19
 
-      - name: Install dependencies
+      - name: Install dependencies and set up test config
+        env:
+          TEST_TOKEN: ${{secrets.KBASE_CI_TOKEN}}
         run: |
+
+          # install python libraries
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install -r dev-requirements.txt
+
+          # set up test config
+          cp -n .env.example .env
+          sed -i "s#^KBASE_SECURE_CONFIG_PARAM_service_token=.*#KBASE_SECURE_CONFIG_PARAM_service_token=$TEST_TOKEN#" .env
 
       - name: Run tests
         shell: bash
