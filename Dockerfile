@@ -1,4 +1,4 @@
-FROM python:3.7-slim-stretch
+FROM python:3.9.19-slim
 
 ARG DEVELOPMENT
 
@@ -18,7 +18,7 @@ COPY requirements.txt /kb/module/requirements.txt
 COPY dev-requirements.txt /kb/module/dev-requirements.txt
 WORKDIR /kb/module
 RUN pip install --upgrade pip && \
-    pip install pandas==0.24.1 && \
+    pip install pandas==2.2.3 && \
     pip install --upgrade -r requirements.txt \
       kbase-workspace-client==0.2.1 && \
     pip install --extra-index-url https://pypi.anaconda.org/kbase/simple \
