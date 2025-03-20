@@ -4,5 +4,5 @@ python-dotenv==0.15.0
 requests==2.25.1
 gunicorn==20.0.4
 gevent==21.1.2
-biopython==1.78
+biopython==1.85
 werkzeug==2.0.3
