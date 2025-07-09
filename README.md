@@ -50,6 +50,6 @@ Run tests with `docker-compose run web test` in a separate terminal window
 Important files:
 
 * `kbase.yml` and `compile_report.json` are the main configuration required by KBase
-* `entrypoint.sh` is the docker container's entrypoint script. The option with no arguments runs the python server.
+* `entrypoint.sh` is the docker container's entrypoint script. The option with no arguments runs the python server
 * `Dockerfile` defines our container and `requirements.txt` defines our pip dependencies.
 * The actual server code lives in `src/server.py`
